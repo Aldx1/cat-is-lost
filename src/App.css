@@ -1,0 +1,56 @@
+.option-menu {
+  background-color: rgb(35 55 75 / 90%);
+  color: #fff;
+  font-family: monospace;
+  z-index: 5;
+  border-radius: 10px;
+}
+
+.context-menu{
+  position: absolute;
+  padding: 5px;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.accepted-files-div {
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.accepted-file-div {
+  position: relative;
+  width: 110px;
+  height: 100px;
+  float: left;
+  border-radius: 10px;
+}
+
+.accepted-file-div img {
+  border-radius: 10px;
+}
+
+.accepted-file-div button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 10px;
+}
+
+#root > nav > a, #root > nav > span {
+  color: white;
+  padding: 0 10px 0 10px;
+}
+
+#root > nav > a:hover, #root > div.option-menu:hover {
+  color: lightgrey;
+}
+
+form .col{
+  padding: 8px !important;
+}
+
+.form-error-text{
+  color: red;
+  padding: 4px 0;
+}
