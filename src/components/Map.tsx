@@ -2,8 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import { IPost } from "../models/Post";
 import { useModal } from "../contexts/ModalContext";
-import PostView from "./PostView";
-import ContextMenu from "./MapContextMenu";
+import MapContextMenu from "./MapContextMenu";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.MAPBOX_TOKEN ?? "";
@@ -35,7 +34,7 @@ const Map = ({
   mainMap = false,
   formMap = false,
 }: IMapProps) => {
-  const { setModalBodyContent, setShowModal, setModalTitle } = useModal();
+  const { setModalPostView } = useModal();
 
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -84,12 +83,6 @@ const Map = ({
       map.current.setCenter([lng, lat]);
     }
   }, [lat, lng]);
-
-  const setModalPostContent = (post: IPost) => {
-    setModalTitle(`${post.name}`);
-    setModalBodyContent(<PostView {...post} />);
-    setShowModal(true);
-  };
 
   // Initial render, init map and any event handlers
   useEffect(() => {
@@ -159,7 +152,7 @@ const Map = ({
 
       const markerElement = marker.getElement();
 
-      markerElement.addEventListener("click", () => setModalPostContent(post));
+      markerElement.addEventListener("click", () => setModalPostView(post));
       markerElement.style.cursor = "pointer";
     });
   }, [markers]);
@@ -168,7 +161,7 @@ const Map = ({
     <>
       <div ref={mapContainer} style={style} />
       {contextMenu && (
-        <ContextMenu
+        <MapContextMenu
           ref={contextMenuRef}
           left={contextMenu.left}
           top={contextMenu.top}

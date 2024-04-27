@@ -1,32 +1,28 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import PostForm from "../components/forms/PostForm";
+import LoginSignupTab from "../components/LoginSignupTab";
+import PostView from "../components/PostView";
+import { IPost } from "../models/Post";
 
 interface IModalContext {
   showModal: boolean;
-  setShowModal: (show: boolean) => void;
-
   modalTitle: string;
-  setModalTitle: (title: string) => void;
-
   modalBodyContent: React.ReactNode | null;
-  setModalBodyContent: (content: React.ReactNode | null) => void;
-
+  setModalLoginSignUp: () => void;
+  setModalPostForm: (lat: number, lng: number) => void;
+  setModalPostView: (post: IPost) => void;
   closeModal: () => void;
 }
 
 const ModalContext = createContext<IModalContext>({
   showModal: false,
-  setShowModal: () => {},
   modalTitle: "",
-  setModalTitle: () => {},
   modalBodyContent: null,
-  setModalBodyContent: () => {},
+  setModalLoginSignUp: () => {},
+  setModalPostForm: () => {},
+  setModalPostView: () => {},
   closeModal: () => {},
 });
-
-export const useModal = () => {
-  const context = useContext(ModalContext);
-  return context;
-};
 
 interface IModalProviderProps {
   children: ReactNode;
@@ -45,19 +41,42 @@ export const ModalProvider = ({ children }: IModalProviderProps) => {
     setModalBodyContent(null);
   };
 
+  const setModalLoginSignUp = () => {
+    setModalTitle("Login/Signup");
+    setModalBodyContent(<LoginSignupTab />);
+    setShowModal(true);
+  };
+
+  const setModalPostForm = (lat: number, lng: number) => {
+    setModalTitle("Create Post");
+    setModalBodyContent(<PostForm lat={lat} lng={lng} />);
+    setShowModal(true);
+  };
+
+  const setModalPostView = (post: IPost) => {
+    setModalTitle(`${post.name}`);
+    setModalBodyContent(<PostView {...post} />);
+    setShowModal(true);
+  };
+
   return (
     <ModalContext.Provider
       value={{
         showModal,
-        setShowModal,
         modalTitle,
-        setModalTitle,
         modalBodyContent,
-        setModalBodyContent,
+        setModalLoginSignUp,
+        setModalPostForm,
+        setModalPostView,
         closeModal,
       }}
     >
       {children}
     </ModalContext.Provider>
   );
+};
+
+export const useModal = () => {
+  const context = useContext(ModalContext);
+  return context;
 };
